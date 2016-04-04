@@ -32,7 +32,7 @@ class Front_Controller {
      * @param type $defaultAction
      */
     public static function getInstance($defaultController, $defaultAction='Index')
-    {echo "ENTRA1";
+    {
         self::$instance=new self($defaultController, $defaultAction);
         return self::$instance;
     }
@@ -41,14 +41,13 @@ class Front_Controller {
      * Selecciona la acción a realizar
      */
     public function Run()
-    {echo "ENTRA";
+    {
         // Cuerpo del controlador frontal
         $ctrlName = isset($_GET[self::CTRL]) ? $_GET[self::CTRL] : $this->defaultController;
         $accName = isset($_GET[self::ACTION]) ? $_GET[self::ACTION] : $this->defaultAction;
 
         // Nombre del fichero a incluir
-        $ctrl_file=CTRL_PATH.$ctrlName.'.php';
-        print_r($ctrl_file);
+        $ctrl_file=CTRL_PATH.$ctrlName.'.php';        
         if (file_exists($ctrl_file))
         {
             include($ctrl_file);

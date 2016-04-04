@@ -1,7 +1,8 @@
 <?php
 include (LIB_PATH.'GestorErrores.php');
+//include (LIB_PATH.'views.php');
 include (HELPERS_PATH.'form.php');
-include (MODEL_PATH.'tareas.php');
+include (MODEL_PATH.'TareasModel.php');
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -58,126 +59,179 @@ class Tareas {
      */
     public function Listar()
     {
-        $tareas = $this->model->GetTareas();
-
-        // En un planteamiento real puede que incluyesemos más cosas
-        $this->Ver('Listado de tarea', CargaVista('listar', array('tareas'=>$tareas)));
+        $array = $this->model->GetTareas();
+        $pags = $this->model->NumPag();
+        $this->Ver('Listado de tareas',
+                CargaVista('VistaListar', array(
+                    'list'=>$array, 'pags'=>$pags)));
     }
     
-    
-    public function Edit()
+     /**
+  * Función que permite editar una tarea. Carga la vista "edit". Tiene en cuenta errores y si se modifica.
+  */
+  public function Edit()
+  {
+    $provincias = $this->model->listaProvinciasParaSelect();
+    if (!isset($_GET['u']))
     {
-        if (! isset($_GET['id']))
-        {
-            // No existe la tarea, error
-            $this->Ver('Error en edición', 
-                    CargaVista('edit_error', array(
-                        'descripcion_error'=>'No existe la tarea seleccionada'
-                        ))
-            );
-            return;
-        }
-        
-         // Han indicado el id
-        $id=$_GET['id'];
-
-
-        if (! $_POST)
-        {
-            // Primera vez.
-            // Leo el regitro y muestro los datos
-            $tarea=$this->model->GetTarea($id);
-            if (! $tarea )
-            {
-                // No existe la tarea, error
-                $this->Ver('Error en edición', 
-                        CargaVista('edit_error', array(
-                            'descripcion_error'=>'No existe la tarea seleccionada'
-                            ))
-                );
-                return;
-            }
-            else
-            {
-                // Mostramos los datos
-                $this->Ver('Edición', CargaVista('edit', array(
-                    'operacion'=>'Edición',
-                    'tarea'=>$tarea, 
-                    'errores'=>$this->errores))
-                );            
-            }
-        }
-         else {
-             // Filtrar datos
-             $this->FiltraCamposPost();
-
-            // Creamos el objeto tarea que es el que se utiliza en el formulario
-            // Lo creamos a partir de los datos recibidos del POST
-            $tarea=array(
-                'nombre'=>  VPost('nombre'),
-                'prioridad'=>VPost('prioridad')
-            );
-
-            if ($this->errores->HayErrores())
-            {
-                // Mostrar ventana de nuevo
-               $this->Ver('Edición', CargaVista('edit', array(
-                   'operacion'=>'Edición', 
-                   'tarea'=>$tarea, 
-                   'errores'=>$this->errores)));            
-            }
-            else
-            {
-                // Guardamos la tarea
-                $this->model->Update($id, $tarea);
-                $this->Ver('Edición', "<p>Se ha guardado la tarea ....</p>");            
-            }
-
-        }
+    $array = $this->model->GetTareas($_GET['id']);
+    $this->Ver('Modificar tarea', CargaVista('edit', array(
+        'provincias'=>$provincias,
+        'edit'=>$array, 
+        'id'=>$_GET['id'])));
     }
-    
-    /**
-     * Añade una nueva tarea
-     * @return type
-     */
+    else
+    {      
+      $form = $this->getForm();
+      $this->model->UpdateTask($_GET['id'], $form);
+      $this->Inicio();
+    }
+  }
+//    public function Edit()
+//    {
+//        if (! isset($_GET['id']))
+//        {
+//            // No existe la tarea, error
+//            $this->Ver('Error en edición', 
+//                    CargaVista('edit_error', array(
+//                        'descripcion_error'=>'No existe la tarea seleccionada'
+//                        ))
+//            );
+//            return;
+//        }
+//        
+//         // Han indicado el id
+//        $id=$_GET['id'];
+//
+//
+//        if (! $_POST)
+//        {
+//            // Primera vez.
+//            // Leo el regitro y muestro los datos
+//            //echo 'Provincia'.$_GET['p'];
+//            $provincias = $this->model->listaProvinciasParaSelect();
+//            $tarea=$this->model->GetTareas($id);
+//            if (! $tarea )
+//            {
+//                // No existe la tarea, error
+//                $this->Ver('Error en edición', 
+//                        CargaVista('edit_error', array(
+//                            'descripcion_error'=>'No existe la tarea seleccionada'
+//                            ))
+//                );
+//                return;
+//            }
+//            else
+//            {
+//                // Mostramos los datos
+//                $this->Ver('Edición', CargaVista('edit', array(
+//                    'provincias'=>$provincias,
+//                    'edit'=>$tarea,
+//                    'id'=>$_GET['id'],
+//                    'errores'=>$this->errores))
+//                );            
+//            }
+//        }
+//         else {
+//             // Filtrar datos
+//             $this->FiltraCamposPost();
+//
+//            // Creamos el objeto tarea que es el que se utiliza en el formulario
+//            // Lo creamos a partir de los datos recibidos del POST
+//            $tarea=array(
+//                'nombre'=>  VPost('nombre'),
+//                'prioridad'=>VPost('prioridad')
+//            );
+//
+//            if ($this->errores->HayErrores())
+//            {
+//                // Mostrar ventana de nuevo
+//               $this->Ver('Edición', CargaVista('edit', array(
+//                   'operacion'=>'Edición', 
+//                   'tarea'=>$tarea, 
+//                   'errores'=>$this->errores)));            
+//            }
+//            else
+//            {
+//                                echo 'Else guarda tareas';
+//                // Guardamos la tarea
+//                $this->model->Update($id, $tarea);
+//                $this->Ver('Edición', "<p>Se ha guardado la tarea ....</p>");            
+//            }
+//
+//        }
+//    }
+      /**
+    * Función que permite añadir una nueva tarea. Carga la vista "addtask". Tiene en cuenta si hay errores antes de realizar dicha carga.
+    */
     public function Add()
     {
-        if (! $_POST)
-        {
-            // Primera vez.
-            $tarea=array(
-                'nombre'=>  '',
-                'prioridad'=>''
-            );
-        }
-        else 
-        {
-             // Filtrar datos
-             $this->FiltraCamposPost();
+      $provincias = $this->model->listaProvinciasParaSelect();
+      if (isset($_POST['add']))
+      {
+        $form = $this->getForm();
+        $errores = $this->getErrores($form);
 
-            // Creamos el objeto tarea que es el que se utiliza en el formulario
-            // Lo creamos a partir de los datos recibidos del POST
-            $tarea=array(
-                'nombre'=>  VPost('nombre'),
-                'prioridad'=>VPost('prioridad')
-            );
-
-            if (! $this->errores->HayErrores())
-            {
-                // Guardamos la tarea y finalizamos
-                $this->model->Add($tarea);
-                $this->Ver('Insertar', "<p>Se ha guardado la tarea ....</p>"); 
-                return;
-            }
+        if($errores != NULL)
+        {
+          $this->Ver('Añadir Tarea', CargaVista('edit', array(
+              'provincias'=>$provincias,
+              'errores'=>$errores)));
         }
-        // Mostramos los datos
-        $this->Ver('Añadir', CargaVista('edit', array(
-            'operacion'=>'Insertar',
-            'tarea'=>$tarea, 
-            'errores'=>$this->errores))
-        );            
-        
+        else
+        {
+          $this->model->AddTareas($form);
+          $this->Home();
+        }
+      }
+      else
+      {
+        $this->Ver('Añadir Tarea', CargaVista('edit',array(
+            'provincias'=>$provincias)));
+      }
     }
+//    /**
+//     * Añade una nueva tarea
+//     * @return type
+//     */
+//    public function Add()
+//    {
+//        if (! $_POST)
+//        {
+//            // Primera vez.
+//            $tarea=array(
+//                'nombre'=>  '',
+//                'prioridad'=>''
+//            );
+//        }
+//        else 
+//        {
+//             // Filtrar datos
+//             $this->FiltraCamposPost();
+//
+//            // Creamos el objeto tarea que es el que se utiliza en el formulario
+//            // Lo creamos a partir de los datos recibidos del POST
+//            $tarea=array(
+//                'nombre'=>  VPost('nombre'),
+//                'prioridad'=>VPost('prioridad')
+//            );
+//
+//            if (! $this->errores->HayErrores())
+//            {
+//                // Guardamos la tarea y finalizamos
+//                $this->model->Add($tarea);
+//                $this->Ver('Insertar', "<p>Se ha guardado la tarea ....</p>"); 
+//                return;
+//            }
+//        }
+//        // Mostramos los datos
+//        $this->Ver('Añadir', CargaVista('edit', array(
+//            'operacion'=>'Insertar',
+//            'tarea'=>$tarea, 
+//            'errores'=>$this->errores))
+//        );            
+//        
+//    }
     
     /**
      * Muestra el resultado del controlador dentro de la plantilla
@@ -219,5 +273,84 @@ class Tareas {
         {
             $this->errores->AnotaError('prioridad', 'La prioridad debe ser un número entre 1 y 5');
         }
-    }    
+    }
+    
+     /**
+    * Función que muestra los datos de una tarea. Carga la vista "show".
+    */   
+    public function Show()
+    {
+      $provincias = $this->model->listaProvinciasParaSelect();
+      $array = $this->model->GetTareas($_GET['id']);
+      $this->Ver('Muestra tarea',  CargaVista('show', array(
+          'provincias'=>$provincias,
+          'show'=>$array, 
+          'id'=>$_GET['id'])));
+      
+    }
+      /**
+    * Función que permite modificar el estado de una tarea, así como sus comentarios. Carga la vista "statusview".
+    */
+    public function Estado()
+    {
+      if (!isset($_GET['u']))
+      {
+          $array = $this->model->GetTareas($_GET['id']);             
+          $this->Ver('Cambiar estado de la tarea', CargaVista('estado',array(
+              'id'=>$_GET['id'],
+              'edit'=>$array)));
+      }
+      else
+      {                
+        $form = $this->getForm();      
+        $this->model->UpdateTask($_GET['id'], $form);
+        $this->Inicio();
+      }
+    }
+  
+    /**
+    * Función que permite borrar una determinada tarea. Carga la vista "deleteview".
+    */
+    public function Delete()
+    {
+      if (!isset($_GET['del']))
+      {
+        $this->Ver('Borrar Tarea', CargaVista('delete', array(
+            'id'=>$_GET['id'])));
+      }
+      else
+      {
+        $this->model->DeleteTask($_GET['id']);
+        $this->Home();
+      }
+    }
+  
+    /**
+    * Función que saca la información de un formulario.
+    * @return devuelve un array con todos los campos del formulario indexados.
+    */
+    private function getForm()
+    {            
+      if (isset($_POST['descripcion']))$field['descripcion'] = $_POST['descripcion'];
+      if (isset($_POST['nombre']))$field['nombre'] = $_POST['nombre'];    
+      if (isset($_POST['telefono']))$field['telefono'] = $_POST['telefono'];
+      if (isset($_POST['correo']))$field['correo'] = $_POST['correo'];
+      if (isset($_POST['direccion']))$field['direccion'] = $_POST['direccion'];
+      if (isset($_POST['poblacion'])){$field['poblacion'] = $_POST['poblacion'];}
+      if (isset($_POST['codigo_postal'])){$field['codigo_postal'] = $_POST['codigo_postal'];}
+      if (isset($_POST['provincia']))$field['provincia'] = $_POST['provincia'];
+      if (isset($_POST['estado'])){$field['estado'] = $_POST['estado'];}
+      if (isset($_POST['fechac']))$field['fechac'] = $_POST['fechac'];
+      if (isset($_POST['operario']))$field['operario'] = $_POST['operario'];
+      if (isset($_POST['fechar']))$field['fechar'] = $_POST['fechar'];
+      if (isset($_POST['anotacionesa'])){$field['anotacionesa'] = $_POST['anotacionesa'];}
+      if (isset($_POST['anotacionesp'])){$field['anotacionesp'] = $_POST['anotacionesp'];}
+
+      return $field;  
+
+    }
+    
+
+
+    
 }

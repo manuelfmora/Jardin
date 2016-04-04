@@ -1,7 +1,9 @@
 <?php 
-include_once 'db.php'; 
+//include_once __DIR__.'/db.php'; 
+require_once(HELPERS_PATH.'form.php');
+require_once(MODEL_PATH.'db.php');
 
-class Modelo
+class Tareas_Model
 {
 	private $db;
 	private $tarea;
@@ -11,26 +13,60 @@ class Modelo
 	 */
 	public function __construct()
 	{		
-		$this->db=$bd=Db::getInstance();//conexion  base de datos	
+		$this->db=Db::getInstance();//conexion  base de datos	
 	}
-	/**
-	 * funcion lista(muestra la lista de tareas de nuestra tarea)
-	 * @return multitype:
-	 */
+         /**
+        * Lista de las tareas paginadas.
+        * @param $id id de la tarea si se desea sacar solo una.
+        * @param $q query en caso de existir paginación.
+        * @return array con la lista de tareas.
+        */
+        public function GetTareas($id = null, $q = null)
+        {
+          $array=[];
+          $itemsforpage = PAGEELEMENTS;
 
-	public function lista()//muestra la lista con todos los datos de nuestras tareas
-	{
-		$instruccion = "SELECT * FROM tareas ORDER BY fechac";
-		$result=$this->db->query($instruccion);
-        
-		
-		while ($fila=$this->db->obtener_fila($result,0))//strm=result
-		{
-			$this->tarea[]=$fila;
-		}
-		
-		return $this->tarea;//devuelve el tarea
-	}
+          if (!isset($id))
+          {
+            $sql = "SELECT * FROM tareas";
+            $query = $this->db->query($sql);
+            $numofitems = $query->num_rows;
+            $regsnum = regsnum($numofitems);
+
+            if ($q != null) {
+                $sql = $q;
+            } else {
+              $sql = "SELECT * FROM tareas ORDER BY id DESC LIMIT $regsnum,$itemsforpage";
+            }
+
+            $query = $this->db->query($sql);
+            while ($row = $this->db->readReg($query))
+            {
+              $array[] = $row;
+            }
+            return $array;
+          } else {
+          $sql = "SELECT * FROM tareas WHERE id = $id";
+          $query = $this->db->query($sql);
+          while ($row = $this->db->readReg($query))
+          {
+            $array[$id] = $row;
+          }
+          return $array;
+          }
+        }
+          /**
+        * Función que saca el número de páginas.
+        * @return número de páginas.
+        */
+        public function NumPag()
+        {
+          $sql = "SELECT * FROM tareas";
+          $query = $this->db->query($sql);
+          $numofitems = $query->num_rows;
+          $pags = pagenum($numofitems);
+          return $pags;
+        }
 	
 	/**
 	 * funcion listaProvincia(muestra la lista de las provincias)
@@ -70,7 +106,7 @@ class Modelo
 			$valores.='"'.$v.'"';
 		}
 		$instruccion='INSERT INTO tareas ('.$campos.') VALUES ('.$valores.')';
-		$result=$this->db->execsql($instruccion);
+		$result=$this->db->query($instruccion);
 	}
 	
 	public function modificar($id,$datos)//modifica los datos que le pasemos segun la id
@@ -89,13 +125,13 @@ class Modelo
 			//$valores.='"'.$v.'"';
 		}
 		$instruccion='UPDATE `tareas` SET '.$campos.' WHERE id='.$id.';';
-		$result=$this->db->execsql($instruccion);
+		$result=$this->db->query($instruccion);
 	}
  	
 	public function eliminar($id,$datos)//elimina el tarea que le pasemos segun su id
 	{
 		$instruccion='DELETE  FROM `tareas` WHERE id='.$id;
-		$result=$this->db->execsql($instruccion);
+		$result=$this->db->query($instruccion);
 	
 	}
 	/**
@@ -118,7 +154,7 @@ class Modelo
  	
  	{
 		$instruccion="SELECT * FROM tareas WHERE $dato LIKE '%$nombre%' ";
-		$result=$this->db->execsql($instruccion);
+		$result=$this->db->query($instruccion);
 		$lista_tareas=array();
 		while ($fila=$this->db->obtener_fila($result,0))//strm=result
 		{
@@ -136,11 +172,31 @@ class Modelo
                 $instruccion="SELECT nombre
                 FROM tbl_provincias
                         where cod=$cod";
-                $result=$this->db->execsql($instruccion); 
+                $result=$this->db->query($instruccion); 
                 while ($fila=$this->db->obtener_fila($result,0))//strm=result
                 {
                         echo $fila['nombre'];
                 }
         }
+        
+        /**
+        * Modifica una tarea.
+        * @param $id id de la tarea a modificar.
+        * @param $array datos a modificar.
+        */
+        public function UpdateTask($id, $array)
+        {
+          $this->db->Update('tareas', $array, $id);
+        }
+        
+        /**
+        * Añade una tarea.
+        * @param $field array con los campos a añadir.
+        */
+        public function AddTareas($field)
+        {
+          $this->db->Insert('tareas', $field);
+        }
+
 
 }

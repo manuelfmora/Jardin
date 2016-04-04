@@ -11,12 +11,13 @@
 
 // definimos constantes que facilitan el trabajo
 define('APP_PATH', __DIR__.'/');
-define('CTRL_PATH', __DIR__.'/controlles/');
+define('CTRL_PATH', __DIR__.'/controllers/');
 define('MODEL_PATH', __DIR__.'/models/');
 define('VIEW_PATH', __DIR__.'/views/');
 define('TEMPLATE_PATH', __DIR__.'/plantilla/');
 define('LIB_PATH', __DIR__.'/lib/');
 define('HELPERS_PATH', __DIR__.'/helpers/');
+define("PAGEELEMENTS", 2);
 
 include (HELPERS_PATH.'vistas.php');
 include (CTRL_PATH .'Front_Controller.php');

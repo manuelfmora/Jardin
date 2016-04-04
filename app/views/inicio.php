@@ -1,4 +1,4 @@
-<h1>Nuestra página de inicio</h1>
+<h1>Bienvenidos a Paco's Garden S.L.</h1>
 
-<p>Página inicio que no hace nada</p>
+<img src="../assets/img/jardin.jpg" alt="Jardin" class="img-rounded">
 
