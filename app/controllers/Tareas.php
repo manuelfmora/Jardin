@@ -174,19 +174,19 @@ class Tareas {
 
         if($errores != NULL)
         {
-          $this->Ver('Añadir Tarea', CargaVista('edit', array(
+          $this->Ver('Añadir Tarea', CargaVista('add', array(
               'provincias'=>$provincias,
               'errores'=>$errores)));
         }
         else
         {
           $this->model->AddTareas($form);
-          $this->Home();
+          $this->Inicio();
         }
       }
       else
       {
-        $this->Ver('Añadir Tarea', CargaVista('edit',array(
+        $this->Ver('Añadir Tarea', CargaVista('add',array(
             'provincias'=>$provincias)));
       }
     }

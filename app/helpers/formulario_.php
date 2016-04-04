@@ -45,13 +45,13 @@ function Valor($array,$campo)
 function CreaSelect($name, $opciones, $valorDefecto='')
 {
 	$html="\n".'<select name="'.$name.'">';
-	foreach($opciones as $value=>$text)
+	foreach($opciones as $key=>$value)
 	{
-		if ($value==$valorDefecto)
+		if ($key==$valorDefecto)
 			$select='selected="selected"';
 		else
 			$select="";
-		$html.= "\n\t<option value=\"$value\" $select>$text</option>";
+		$html.= "\n\t<option value=\"$key\" $select>$value</option>";
 		
 	}
 	$html.="\n</select>";

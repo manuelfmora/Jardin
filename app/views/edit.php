@@ -18,6 +18,7 @@
       echo "</div>";
     } ?>
   <!-- -------------------------------- -->
+  
     <fieldset>
       <legend>Datos de la tarea</legend>
       <div class="form-group">
@@ -41,7 +42,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">Comentarios previos</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" name="bef_notes" value="<?php Valorpostedit($edit,$id,'anotacionesa')?>">
+          <input type="text" class="form-control" name="anotacionesa" value="<?php Valorpostedit($edit,$id,'anotacionesa')?>">
         </div>
       </div>
       <div class="form-group">
@@ -52,7 +53,8 @@
       </div>
 
     </fieldset>
-  <!-- -------------------------------- -->
+  
+      <!-- -------------------------------- -->
     <fieldset>
       <legend>Datos del cliente</legend>
       <div class="form-group">
@@ -98,9 +100,8 @@
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Provincia</label>
-        <div class="col-sm-10">
-          <?php print_r($provincias) ?> 
-          <?php Creaselect($provincias); ?>
+        <div class="col-sm-10">           
+            <?php echo CreaSelect('provincia',$provincias); ?>
         </div>
       </div>
     </fieldset>

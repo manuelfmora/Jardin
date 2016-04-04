@@ -45,17 +45,28 @@ function Valor($array,$campo)
 }
 
 /**
-* Función que crea un select, en este caso de provincias.
-* @param $array array del cuál se creará el select.
-*/
-function Creaselect($array)
-{
-  echo "<select class='form-control' name='provincia'>";
-  foreach ($array as $key)
-  {
-    echo '<option value="'.$key['cod'].'">'.$key['nombre'].'</option>';
-  }
-  echo "</select>";
+ *
+ * @param string $name Nombre del campo
+ * @param array $opciones Opciones que tiene el select
+ * 			clave array=valor option
+ * 			valor array=texto option
+ * @param string $valorDefecto Valor seleccionado
+ * @return string
+ */
+function CreaSelect($name, $opciones, $valorDefecto=''){
+	$html="\n".'<select name="'.$name.'">';
+	foreach($opciones as $key=>$value)
+	{
+		if ($key==$valorDefecto)
+			$select='selected="selected"';
+		else
+			$select="";
+		$html.= "\n\t<option value=\"$key\" $select>$value</option>";
+		
+	}
+	$html.="\n</select>";
+
+	return $html;
 }
 
 /**
@@ -137,6 +148,9 @@ function actualPag()
 */
 function Valorpostedit($array,$id,$campo)
 {
+    print_r($array);
+    print_r($id);
+    print_r($campo);
   if(isset($array[$id][$campo]))
   {
     echo $array[$id][$campo];
