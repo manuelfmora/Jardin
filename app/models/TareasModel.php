@@ -239,6 +239,26 @@ class Tareas_Model
           return $array;
           }
         }
+        //Nueva funcion
+        public function login(){
+            
+            session_start();
+            // comprobar los argumentos recibidos
+            if ($_POST["username"]=="prueba" && $_POST["password"]=="1234") {
+                // usuario validado correctamente.
+                // Meter en sesión y enviar a la página de inicio
+                $_SESSION["usuario"] = $_POST["username"];
+                header ("Location: inicio.php");
+            } else {
+                echo 'Error. Usuario o contraseña incorrectos'; 
+                echo '<a href="c=Tareas&a=Index">Intentarlo de nuevo</a>';
+            }
+        }
+            
+           
+
+            
+        
 
 
 }

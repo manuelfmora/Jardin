@@ -35,13 +35,19 @@ class Tareas {
         $this->Inicio();
     }
     
-    /**
-     * Muestra la página de Inicio
-     */
+//    /**
+//     * Muestra la página de Inicio
+//     */
+//    public function Inicio()
+//    {
+//        // En un controlador real esto haría más cosas
+//        $this->Ver('Página de inicio', CargaVista('inicio'));
+//    }
+    // Cambiada
     public function Inicio()
     {
         // En un controlador real esto haría más cosas
-        $this->Ver('Página de inicio', CargaVista('inicio'));
+        $this->Ver('Página de inicio', CargaVista('session'));
     }
     
    /**
