@@ -55,8 +55,7 @@ class GestorErrores {
     }    
     
     /**
-     * Devuelve la descripción de error para un campo o una cadaena vacia si no
-     * hay
+     * Devuelve la descripción de error para un campo o una cadaena vacia si no hay
      * @param type $campo
      * @return string
      */

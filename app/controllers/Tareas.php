@@ -1,6 +1,5 @@
 <?php
 include (LIB_PATH.'GestorErrores.php');
-//include (LIB_PATH.'views.php');
 include (HELPERS_PATH.'form.php');
 include (MODEL_PATH.'TareasModel.php');
 
@@ -349,6 +348,142 @@ class Tareas {
       return $field;  
 
     }
+    
+    private function getErrores($array)
+    {
+      $errores = [];
+      $error = false;
+      $telefono = "/[0-9\s+_]$/";
+      $email = "/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/";
+      $fecha = "/^\d{4}\-\d{2}\-\d{2}$/";
+
+      if(!isset($array['descripcion']) || $array['descripcion'] == "")
+      {
+        $errores[] = "El campo 'Descripción' debe estar relleno.";
+        $error = true;
+      }
+
+      if(!isset($array['operario']) || $array['operario'] == "")
+      {
+        $errores[] = "El campo 'Operario encargado' debe estar relleno.";
+        $error = true;
+      }
+
+      if(!isset($array['fechac']) || $array['fechac'] == "")
+      {
+        $errores[] = "El campo 'Fecha de realización' debe estar relleno.";
+        $error = true;
+      } else {
+        if (!preg_match($fecha, $array['fechac']))
+        {
+          $errores['formato'] = "Formato de fecha incorrecto. AAAA-MM-DD";
+          $error = true;
+        }
+      }
+
+      if(!isset($array['nombre']) || $array['nombre'] == "")
+      {
+        $errores[] = "El campo 'Nombre' debe estar relleno.";
+        $error = true;
+      }
+      if(!isset($array['telefono']) || $array['telefono'] == "")
+      {
+        $errores[] = "El campo 'Teléfono' debe estar relleno.";
+        $error = true;
+      } else {
+        if (!preg_match($telefono, $array['telefono']))
+        {
+          $errores[] = "El formato de 'Teléfono' es incorrecto. Debe ser un telefono español.";
+          $error = true;
+        }
+      }
+
+      if(!isset($array['correo']) || $array['correo'] == "")
+      {
+        $errores[] = "El campo 'Correo electrónico' debe estar relleno.";
+        $error = true;
+      } else {
+        if (!preg_match($email, $array['correo']))
+        {
+          $errores[] = "El formato de 'Email' es incorrecto.";
+          $error = true;
+        }
+      }
+
+      if(!isset($array['direccion']) || $array['direccion'] == "")
+      {
+        $errores[] = "El campo 'Dirección' debe estar relleno.";
+        $error = true;
+      }
+
+      if(!isset($array['poblacion']) || $array['poblacion'] == "")
+      {
+        $errores[] = "El campo 'Población' debe estar relleno.";
+        $error = true;
+      }
+
+      if($error)
+      {
+        return $errores;
+      } else {
+        return NULL;
+      }
+    }
+    
+    public function Buscar() {
+
+      if (isset($_POST["sr"])) {
+
+              if (empty($_POST["description"]) && empty($_POST["c_date"]) && empty($_POST["status"])) {
+
+                      echo "No has buscado por ningún campo";
+
+              } else {
+
+          $query = "SELECT * FROM tareas WHERE ";
+                      $num = 0;
+
+                      if (!empty($_POST["c_date"])) {
+                          $c_date= $_POST["c_date"];
+                              //$c_date = formatDate($_POST["c_date"]);
+                              $operator = $_POST["operator"];
+                              if ($num != 0) {
+                                      $query .= " and ";
+                              }
+                              $query .= "fechac $operator '$c_date'";
+                              $num++;
+                      }
+
+          if (!empty($_POST["status"])) {
+            $status = $_POST["status"];
+            if ($num != 0) {
+              $query .= " and ";
+            }
+            $query .= "estado = '$status'";
+            $num++;
+          }
+
+          if (!empty($_POST["description"])) {
+            $description = $_POST["description"];
+            if ($num != 0) {
+              $query .= " and ";
+            }
+            $query .= "descripcion LIKE '%$description%'";
+            $num++;
+          }
+
+                      $array = $this->model->TaskList(null,$query);
+
+                $this->Ver('Resultados tareas', CargaVista('VistaListar', array(
+                    'list'=>$array)));
+
+              }
+
+      } else {
+        $this->Ver('Buscar', CargaVista('buscar'));
+      }
+    }
+    
     
 
 

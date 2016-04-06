@@ -6,21 +6,38 @@
 */
  ?>
 <div class="container">
+    <table class="table">
+        <tr>
+            <td>
+                <h3>ID-Tareas</h3>              
+            </td>
+            <td>
+                <h3 >Acciones a Realizar</h3>  
+            </td>
+            
+        </tr>
+       
+    </table>
   <table class="table">
+     
     <?php foreach($list as $task) : ?>
       <tr>
-        <td>            
+        <td>           
           <a href="?c=Tareas&a=Show&id=<?= $task['id']?>"><?php echo $task['id'].' '.$task['descripcion'];?></a>
+        </td>
+        <td>
           <a href="?c=Tareas&a=Estado&id=<?= $task['id']?>"><button class="btn btn-primary right botonwidth"><?php echo $task['estado'];?></button></a>
           <a href="?c=Tareas&a=Edit&id=<?= $task['id']?>"><button class="btn btn-primary right botonwidth">Modificar</button></a>
           <a href="?c=Tareas&a=Delete&id=<?= $task['id']?>"><button class="btn btn-danger right botonwidth">Eliminar</button></a>         
           <?php endforeach; ?>
+           
         </td>
       </tr>
+     
   </table>
 </div>
 <?php if (isset($pags)):?>
-<div class="container center">
+<div class="text-center">
 
 <?php if ($pags != 1): ?>
 

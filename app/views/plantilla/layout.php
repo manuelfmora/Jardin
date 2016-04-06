@@ -13,13 +13,18 @@ Igualmente nuestra aplicación podría tener tantos layouts como deseasemos
 -->
 <html>
     <head>
-        <title>Paco's Garden S.L.- <?=$titulo?></title>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="../assets/js/bootstrap.min.js"></script>        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><?=$titulo?></title> 
+        <script src="../assets/js/jquery.js" type="text/javascript"></script>
+        <script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+        <link href="../assets/css/bootstrap-theme.css" type="text/css" rel="stylesheet">  
+        <link href="../assets/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+        <link href="../assets/css/mi.css" type="text/css" rel="stylesheet">
+       
+        
+              
     </head>    
 <body>
     <header>
@@ -31,7 +36,7 @@ Igualmente nuestra aplicación podría tener tantos layouts como deseasemos
     <div class="container"><?=$cuerpo?></div>
     <footer>
         <hr>
-        <a href="#" target="_blank"><p class="container">Creado por Manuel Francisco Mora Martín</p></a>
+        <a href="#" target="_blank"><p class="text-center">Creado por Manuel Francisco Mora Martín</p></a>
     </footer>
 </body>
 </html>

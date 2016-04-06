@@ -5,24 +5,25 @@
  */
 
 /**
- * Devuelve el valor de una variable enviada por POST. Devolverá el valor
+ * Devuelve el valor de una variable enviada por POST. Devolverá vacio
  * por defecto en caso de no existir.
  * 
- * @param string $campo
- * @param string $default   Valor por defecto en caso de no existir
+ * @param string $campo  
  * @return string
- */
-function VPost($campo, $default='')
+*/
+function ValorPost($campo)
 {
-    if (isset($_POST[$campo]))
-    {
-        return $_POST[$campo];
-    }
-    else
-    {
-        return $default;
-    }
+  if(isset($_POST[$campo]))
+  {
+    echo $_POST[$campo];
+  }
+  else
+  {
+    echo "";
+  }
 }
+
+
 
 function ValorGet($campo)
 {
@@ -148,9 +149,9 @@ function actualPag()
 */
 function Valorpostedit($array,$id,$campo)
 {
-    print_r($array);
-    print_r($id);
-    print_r($campo);
+//    print_r($array);
+//    print_r($id);
+//    print_r($campo);
   if(isset($array[$id][$campo]))
   {
     echo $array[$id][$campo];

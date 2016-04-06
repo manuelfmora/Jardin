@@ -197,6 +197,48 @@ class Tareas_Model
         {
           $this->db->Insert('tareas', $field);
         }
+        
+          /**
+        * Saca la lista de las tareas paginadas.
+        * @param $id id de la tarea si se desea sacar solo una.
+        * @param $q query en caso de existir paginación.
+        * @return array con la lista de tareas.
+        */
+        public function TaskList($id = null, $q = null)
+        {
+
+          $array=[];
+          $itemsforpage = PAGEELEMENTS;
+
+          if (!isset($id))
+          {
+            $sql = "SELECT * FROM tareas";
+            $query = $this->db->Query($sql);
+            $numofitems = $query->num_rows;
+            $regsnum = regsnum($numofitems);
+
+            if ($q != null) {
+                $sql = $q;
+            } else {
+              $sql = "SELECT * FROM tareas ORDER BY id DESC LIMIT $regsnum,$itemsforpage";
+            }
+
+            $query = $this->db->Query($sql);
+            while ($row = $this->db->readReg($query))
+            {
+              $array[] = $row;
+            }
+            return $array;
+          } else {
+          $sql = "SELECT * FROM tareas WHERE id = $id";
+          $query = $this->db->Query($sql);
+          while ($row = $this->db->readReg($query))
+          {
+            $array[$id] = $row;
+          }
+          return $array;
+          }
+        }
 
 
 }
