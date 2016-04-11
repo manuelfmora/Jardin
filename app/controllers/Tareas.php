@@ -14,7 +14,8 @@ class Tareas {
     protected $errores=NULL;
     protected $controller=NULL;
 
-    public function __construct() {        
+    public function __construct() {
+        
         $this->model=new Tareas_Model();
         // El gestor solo sería necesario crearlo si editamos o insertamos
         // Inicializamos el gestor de errores que utilizaremos en la vista
@@ -58,9 +59,14 @@ class Tareas {
     }
     
     /**
-     * 
+     * Muestra la pantalla para logearse
      */
-    
+    public function login(){
+        $this->controller = new Login();
+        $this->controller->CreaLogin();        
+        $this->Ver('Login',
+                CargaVista('login', array(  )));
+    }
  
     
     /**

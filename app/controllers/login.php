@@ -34,7 +34,9 @@ class Login {
                 $loginok = FALSE; //Variable usada para mostrar error en la vista
                 include_once VIEW_PATH . 'login.php';
             }
+            
         } else{
+            
             include_once VIEW_PATH.'login.php';
         }
         
