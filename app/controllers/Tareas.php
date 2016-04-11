@@ -30,15 +30,6 @@ class Tareas {
         $this->Inicio();
     }
     
-//    /**
-//     * Muestra la página de Inicio
-//     */
-//    public function Inicio()
-//    {
-//        // En un controlador real esto haría más cosas
-//        $this->Ver('Página de inicio', CargaVista('inicio'));
-//    }
-    // Cambiada
     public function Inicio()
     {
         if (!file_exists('config.php')) { //Si no existe el fichero de configuración, accede al instalador
@@ -65,6 +56,10 @@ class Tareas {
                 $this->Ver('Página de inicio', CargaVista('inicio'));
         }
     }
+    
+    /**
+     * 
+     */
     
  
     
