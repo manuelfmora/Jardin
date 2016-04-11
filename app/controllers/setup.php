@@ -67,8 +67,6 @@ class Setup{
 
             }
             $mysqli->close();
-        }
-
-        //header("Location: index.php?ctrl=principal");
+        }        
     }
 }

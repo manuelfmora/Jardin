@@ -54,7 +54,7 @@ class Tareas {
                 $this->controller->CreaFichero();
                 if (file_exists('config.php')){
                     echo 'Entra HAY INSTALADOR Y MOSTRAMO PAGINA DE INICIO.............<br>'; 
-                    //$this->model=new Tareas_Model();
+                    
                     $this->Ver('Página de inicio', CargaVista('inicio'));
                 }
                 
