@@ -8,7 +8,6 @@
  * Modelo
  * 
  */
-
 // definimos constantes que facilitan el trabajo
 define('APP_PATH', __DIR__.'/');
 define('CTRL_PATH', __DIR__.'/controllers/');

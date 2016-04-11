@@ -1,26 +1,21 @@
 <?php
 include (LIB_PATH.'GestorErrores.php');
 include (HELPERS_PATH.'form.php');
+include (CTRL_PATH.'setup.php');
 include (MODEL_PATH.'TareasModel.php');
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  * Description of Tareas
  *
- * @author santi
+ * @author Manuel Francisco Mora Martín.
  */
 class Tareas {
     protected $model=NULL;
     protected $errores=NULL;
-    
-    public function __construct() {
+    protected $controller=NULL;
+
+    public function __construct() {        
         $this->model=new Tareas_Model();
-        
         // El gestor solo sería necesario crearlo si editamos o insertamos
         // Inicializamos el gestor de errores que utilizaremos en la vista
         $this->errores=new GestorErrores(
@@ -46,24 +41,38 @@ class Tareas {
     // Cambiada
     public function Inicio()
     {
-        // En un controlador real esto haría más cosas
-        $this->Ver('Página de inicio', CargaVista('session'));
+        if (!file_exists('config.php')) { //Si no existe el fichero de configuración, accede al instalador
+            echo 'Entra No existe CONFIG.PHP<br>';
+            if(!$_POST){
+                echo 'Entra en NO HAY INSTALADOR<br>';
+                $this->Ver('Intalador', CargaVista('setup'));
+            }
+            else {
+                
+                echo 'Entra CREAACIÓN DEL INSTALADOR.............<br>';
+                $this->controller=new Setup();
+                $this->controller->CreaFichero();
+                if (file_exists('config.php')){
+                    echo 'Entra HAY INSTALADOR Y MOSTRAMO PAGINA DE INICIO.............<br>'; 
+                    //$this->model=new Tareas_Model();
+                    $this->Ver('Página de inicio', CargaVista('inicio'));
+                }
+                
+            }
+            
+        } else {
+                
+                $this->Ver('Página de inicio', CargaVista('inicio'));
+        }
     }
     
-   /**
-     * Muestra la página Pag1
-     */
-    public function Pag1()
-    {
-        // En un controlador real esto haría más cosas
-        $this->Ver('Página 1ª', CargaVista('pag1'));
-    }
+ 
     
     /**
      * Muestra la lista de tareas
      */
     public function Listar()
-    {
+    {        
         $array = $this->model->GetTareas();
         $pags = $this->model->NumPag();
         $this->Ver('Listado de tareas',
@@ -91,82 +100,8 @@ class Tareas {
       $this->model->UpdateTask($_GET['id'], $form);
       $this->Inicio();
     }
-  }
-//    public function Edit()
-//    {
-//        if (! isset($_GET['id']))
-//        {
-//            // No existe la tarea, error
-//            $this->Ver('Error en edición', 
-//                    CargaVista('edit_error', array(
-//                        'descripcion_error'=>'No existe la tarea seleccionada'
-//                        ))
-//            );
-//            return;
-//        }
-//        
-//         // Han indicado el id
-//        $id=$_GET['id'];
-//
-//
-//        if (! $_POST)
-//        {
-//            // Primera vez.
-//            // Leo el regitro y muestro los datos
-//            //echo 'Provincia'.$_GET['p'];
-//            $provincias = $this->model->listaProvinciasParaSelect();
-//            $tarea=$this->model->GetTareas($id);
-//            if (! $tarea )
-//            {
-//                // No existe la tarea, error
-//                $this->Ver('Error en edición', 
-//                        CargaVista('edit_error', array(
-//                            'descripcion_error'=>'No existe la tarea seleccionada'
-//                            ))
-//                );
-//                return;
-//            }
-//            else
-//            {
-//                // Mostramos los datos
-//                $this->Ver('Edición', CargaVista('edit', array(
-//                    'provincias'=>$provincias,
-//                    'edit'=>$tarea,
-//                    'id'=>$_GET['id'],
-//                    'errores'=>$this->errores))
-//                );            
-//            }
-//        }
-//         else {
-//             // Filtrar datos
-//             $this->FiltraCamposPost();
-//
-//            // Creamos el objeto tarea que es el que se utiliza en el formulario
-//            // Lo creamos a partir de los datos recibidos del POST
-//            $tarea=array(
-//                'nombre'=>  VPost('nombre'),
-//                'prioridad'=>VPost('prioridad')
-//            );
-//
-//            if ($this->errores->HayErrores())
-//            {
-//                // Mostrar ventana de nuevo
-//               $this->Ver('Edición', CargaVista('edit', array(
-//                   'operacion'=>'Edición', 
-//                   'tarea'=>$tarea, 
-//                   'errores'=>$this->errores)));            
-//            }
-//            else
-//            {
-//                                echo 'Else guarda tareas';
-//                // Guardamos la tarea
-//                $this->model->Update($id, $tarea);
-//                $this->Ver('Edición', "<p>Se ha guardado la tarea ....</p>");            
-//            }
-//
-//        }
-//    }
-      /**
+   }
+    /**
     * Función que permite añadir una nueva tarea. Carga la vista "addtask". Tiene en cuenta si hay errores antes de realizar dicha carga.
     */
     public function Add()
@@ -195,48 +130,6 @@ class Tareas {
             'provincias'=>$provincias)));
       }
     }
-//    /**
-//     * Añade una nueva tarea
-//     * @return type
-//     */
-//    public function Add()
-//    {
-//        if (! $_POST)
-//        {
-//            // Primera vez.
-//            $tarea=array(
-//                'nombre'=>  '',
-//                'prioridad'=>''
-//            );
-//        }
-//        else 
-//        {
-//             // Filtrar datos
-//             $this->FiltraCamposPost();
-//
-//            // Creamos el objeto tarea que es el que se utiliza en el formulario
-//            // Lo creamos a partir de los datos recibidos del POST
-//            $tarea=array(
-//                'nombre'=>  VPost('nombre'),
-//                'prioridad'=>VPost('prioridad')
-//            );
-//
-//            if (! $this->errores->HayErrores())
-//            {
-//                // Guardamos la tarea y finalizamos
-//                $this->model->Add($tarea);
-//                $this->Ver('Insertar', "<p>Se ha guardado la tarea ....</p>"); 
-//                return;
-//            }
-//        }
-//        // Mostramos los datos
-//        $this->Ver('Añadir', CargaVista('edit', array(
-//            'operacion'=>'Insertar',
-//            'tarea'=>$tarea, 
-//            'errores'=>$this->errores))
-//        );            
-//        
-//    }
     
     /**
      * Muestra el resultado del controlador dentro de la plantilla
@@ -326,7 +219,7 @@ class Tareas {
       else
       {
         $this->model->DeleteTask($_GET['id']);
-        $this->Home();
+        $this->Inicio();
       }
     }
   

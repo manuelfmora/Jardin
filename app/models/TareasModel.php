@@ -3,6 +3,7 @@
 require_once(HELPERS_PATH.'form.php');
 require_once(MODEL_PATH.'db.php');
 
+
 class Tareas_Model
 {
 	private $db;
@@ -12,7 +13,7 @@ class Tareas_Model
 	 * Constructor
 	 */
 	public function __construct()
-	{		
+	{       echo 'Entra constructor TareasModel<br>';	
 		$this->db=Db::getInstance();//conexion  base de datos	
 	}
          /**

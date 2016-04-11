@@ -1,22 +1,28 @@
 <?php 
-
+include_once 'config.php'; 
 /* Clase encargada de gestionar las conexiones a la base de datos */
 Class Db{
 
-	private $servidor='localhost';
-	private $usuario='root';
-	private $password='';
-	private $base_datos='practica';
- 	private $link;
-	private $stmt;
+//	private $servidor='localhost';
+//	private $usuario='root';
+//	private $password='';
+//	private $base_datos='practica';
+ 	private $link;	
         private $result;
 	private $array;
+        protected $conecDB=NULL;
 
-	static $_instance;
+
+
+        static $_instance;
 
 	/*La función construct es privada para evitar que el objeto pueda ser creado mediante new*/
 	private function __construct(){
-		$this->conectar();
+            
+                   
+            $this->conectar();
+//            print_r('SERVIDOR: '.$db_conf['servidor']);          
+//	    $this->conectado($GLOBALS['db_conf']); //le pasamos la base de datos
 	}
 
 	/*Evitamos el clonaje del objeto. Patrón Singleton*/
@@ -29,12 +35,52 @@ Class Db{
 		}
 		return self::$_instance;
 	}
+        
+        private function conectar(){
+            if (file_exists('config.php')){
+                echo 'Entra en la función Conectar....................<br>';             
+                //include_once 'config.php';                
+//              echo 'Imprime $Globalssssssssssssssssssss'.$GLOBALS['$db_conf'];
+              //$this->conectado($GLOBALS['$db_conf']);
+   //--------------------------------------------------             
+//                $db_conf= array(
+//                'servidor'=>'localhost',
+//                'usuario'=>'root',
+//                'password'=>'',
+//                'base_datos'=>'practica');
+                
+                $this->conectado($GLOBALS['db_conf']);
+            }
+        }
 
-	/*Realiza la conexión a la base de datos.*/
-	private function conectar(){
-		$this->link=mysqli_connect($this->servidor, $this->usuario, $this->password);
-		mysqli_select_db ($this->link,$this->base_datos);
+        /*Realiza la conexión a la base de datos.*/
+	private function conectado($conf){
+          
+            echo 'Entra en la función CONECTADO<br>';
+                if (!is_array($conf)) {
+                    echo "<p>Faltan parámetros de configuración</p>";
+                    //var_dump($conf);                    
+                    exit();
+                }
+//                $this->link = new mysqli($conf['servidor'], $conf['usuario'], $conf['password']);
+//                /* check connection */
+//                if (!$this->link) {
+//                    printf("Error de conexión: %s\n", mysqli_connect_error());                    
+//                    exit();
+//                }
+                
+//                $this->link->select_db($conf['base_datos']);
+//                $this->link->query("SET NAMES 'utf8'");
+//-------------------------------------------------------------------------------------------------------------
+                
+		$this->link=mysqli_connect($conf['servidor'], $conf['usuario'], $conf['password']);
+		mysqli_select_db ($this->link,$conf['base_datos']);
 		mysqli_set_charset ($this->link,"utf8");
+                
+//                $this->link=mysqli_connect($this->servidor, $this->usuario, $this->password);
+//		mysqli_select_db ($this->link,$this->base_datos);
+//		mysqli_set_charset ($this->link,"utf8");
+            
 		
 	}
 
@@ -44,7 +90,7 @@ Class Db{
 		return $this->result;
 	}	
 	/*Método para ejecutar una sentencia sql*/
-	public function query ($instruccion){
+	public function query ($instruccion){            
 		$this->result=mysqli_query($this->link,$instruccion);//($instruccion,$this->link)
 	
 		/*si la consulta esta mal saldrá*/
