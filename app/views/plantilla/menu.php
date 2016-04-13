@@ -57,7 +57,7 @@
                         </span>
                         <br>
                         <span style=" float: right; color: #18BC9C;"> 
-                            <a href="?ctrl=cerrarsesion" style="color: #18BC9C;"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión,</a>    
+                            <a href="<?=Front_Controller::MakeURL('Tareas', 'closeSession')?>" style="color: #18BC9C;"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión,</a>    
                             <?php echo $_SESSION['horainicio']; ?> 
                         </span>
                         <br>

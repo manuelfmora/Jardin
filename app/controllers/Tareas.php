@@ -58,7 +58,18 @@ class Tareas {
                 $this->Ver('Página de inicio', CargaVista('inicio'));
         }
     }
-    
+    /**
+    * CONTROLADOR que cierra la sesión
+    */
+    public function closeSession(){
+        
+       session_unset();
+       session_destroy();
+
+       header('Location: index.php');
+    }
+
+
     /**
      * Muestra la pantalla para logearse
      */
@@ -96,26 +107,26 @@ class Tareas {
     }
     
      /**
-  * Función que permite editar una tarea. Carga la vista "edit". Tiene en cuenta errores y si se modifica.
-  */
-  public function Edit()
-  {
-    $provincias = $this->model->listaProvinciasParaSelect();
-    if (!isset($_GET['u']))
+    * Función que permite editar una tarea. Carga la vista "edit". Tiene en cuenta errores y si se modifica.
+    */
+    public function Edit()
     {
-    $array = $this->model->GetTareas($_GET['id']);
-    $this->Ver('Modificar tarea', CargaVista('edit', array(
-        'provincias'=>$provincias,
-        'edit'=>$array, 
-        'id'=>$_GET['id'])));
-    }
-    else
-    {      
-      $form = $this->getForm();
-      $this->model->UpdateTask($_GET['id'], $form);
-      $this->Inicio();
-    }
-   }
+      $provincias = $this->model->listaProvinciasParaSelect();
+      if (!isset($_GET['u']))
+      {
+      $array = $this->model->GetTareas($_GET['id']);
+      $this->Ver('Modificar tarea', CargaVista('edit', array(
+          'provincias'=>$provincias,
+          'edit'=>$array, 
+          'id'=>$_GET['id'])));
+      }
+      else
+      {      
+        $form = $this->getForm();
+        $this->model->UpdateTask($_GET['id'], $form);
+        $this->Inicio();
+      }
+     }
     /**
     * Función que permite añadir una nueva tarea. Carga la vista "addtask". Tiene en cuenta si hay errores antes de realizar dicha carga.
     */
