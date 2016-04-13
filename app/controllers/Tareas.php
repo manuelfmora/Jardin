@@ -2,7 +2,6 @@
 include (LIB_PATH.'GestorErrores.php');
 include (HELPERS_PATH.'form.php');
 include (CTRL_PATH.'setup.php');
-include (CTRL_PATH.'login.php');
 include (MODEL_PATH.'TareasModel.php');
 
 /**
