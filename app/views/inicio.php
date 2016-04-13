@@ -1,4 +1,6 @@
-<h1>Bienvenidos a Paco's Garden S.L.</h1>
+<div class="jumbotron">
+<h3>Bienvenidos a Paco's Garden S.L.</h3>
 
-<img src="../assets/img/jardin.jpg" alt="Jardin" class="img-rounded">
+<img src="../assets/bootstrap/img/jardin.jpg" alt="Jardin" class="img-rounded">
 
+</div>

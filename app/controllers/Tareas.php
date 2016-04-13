@@ -64,9 +64,22 @@ class Tareas {
      */
     public function login(){
         $this->controller = new Login();
-        $this->controller->CreaLogin();        
+        if (!EMPTY($_POST['usuario']) && !EMPTY($_POST['clave'])){
+            echo 'ENTRA EN EMTY...................<BR>';
+            $loginok=$this->controller->CreaLogin();
+            
+            if($loginok==FALSE ){
+                echo 'ENTRA EN SESSION_LOGIN FALSE...................<BR>';
+               $this->Ver('Login',
+                    CargaVista('login', array( 'loginok'=>$loginok )));
+                
+            }  
+//            else {
+//                  header('Location: index.php');                       
+//            }
+        }
         $this->Ver('Login',
-                CargaVista('login', array(  )));
+                    CargaVista('login', array()));
     }
  
     
