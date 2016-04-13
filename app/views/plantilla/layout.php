@@ -44,18 +44,34 @@ Igualmente nuestra aplicación podría tener tantos layouts como deseasemos
               
     </head>    
 <body>
-    <header>
-        <div class="page-header">
-           <h1>Paco's Garden S.L.</h1>
-        </div>
+    <header>       
         
     </header>   
 
     <div><?=$menu?></div>
     <div class="container"><?=$cuerpo?></div>
-    <footer>
+    <!-- Pie de la aplicación, mostrado en todas las páginas -->
+    <!-- Pie -->
+    <footer class="text-center">
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="">
+                    <div class="footer-col col-md-12">                        
+                        <h3>Creado por Manuel Francisco Mora Martín</h3>
+                    </div>
+                </div>
+            </div>
+
+    </footer>
+
+    <!-- jQuery -->    
+    <script src="../assets/bootstrap/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+<!--    <footer>
         <hr>
         <a href="#" target="_blank"><p class="text-center">Creado por Manuel Francisco Mora Martín</p></a>
-    </footer>
+    </footer>-->
 </body>
 </html>
