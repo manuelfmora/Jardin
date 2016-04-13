@@ -22,7 +22,6 @@
                         <input type="password" class="form-control" placeholder="Contraseña" name="clave"/>
                     </div>
                 </div>
-
                 <?php if (isset($loginok) && !$loginok): ?>
                     <div class="alert alert-danger">
                         <b>¡Error!</b> Usuario o contraseña incorrectos
